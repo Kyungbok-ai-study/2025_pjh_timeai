@@ -78,7 +78,7 @@ __pypackages__/
 # Cython debug
 cython_debug/
 # Environments & secrets
-.env
+**/.env
 .env.*
 .venv/
 venv/

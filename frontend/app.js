@@ -1,4 +1,4 @@
-const BASE = location.origin; // 같은 오리진(예: http://localhost:8000)
+const BASE = location.origin; // 같은 오리진 (예: http://localhost:8000)
 
 // 엘리먼트
 const q = document.getElementById("q");
@@ -22,33 +22,29 @@ const assignmentsWrap = document.getElementById("assignmentsWrap");
 
 // === 유틸 ===
 async function apiGet(path) {
-  const res = await fetch(`${BASE}${path}`);
+  const url = new URL(path, BASE); // 절대경로 생성
+  console.debug("GET", url.href);
+  const res = await fetch(url.href);
   const txt = await res.text();
   if (!res.ok) {
-    try {
-      const j = JSON.parse(txt);
-      throw new Error(j.detail || j.message || txt);
-    } catch {
-      throw new Error(txt);
-    }
+    try { const j = JSON.parse(txt); throw new Error(j.detail || j.message || txt); }
+    catch { throw new Error(txt); }
   }
   return JSON.parse(txt);
 }
 
 async function apiPost(path, body) {
-  const res = await fetch(`${BASE}${path}`, {
+  const url = new URL(path, BASE); // 절대경로 생성
+  console.debug("POST", url.href, body);
+  const res = await fetch(url.href, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
   });
   const txt = await res.text();
   if (!res.ok) {
-    try {
-      const j = JSON.parse(txt);
-      throw new Error(j.detail || j.message || txt);
-    } catch {
-      throw new Error(txt);
-    }
+    try { const j = JSON.parse(txt); throw new Error(j.detail || j.message || txt); }
+    catch { throw new Error(txt); }
   }
   return JSON.parse(txt);
 }
@@ -78,7 +74,7 @@ function renderCourses(list, total = null) {
   });
   table.appendChild(tbody);
   coursesWrap.appendChild(table);
-}  // ✅ 누락됐던 중괄호 추가
+}
 
 function renderAssignments(assignments) {
   assignmentsWrap.innerHTML = "";
@@ -156,7 +152,7 @@ btnSchedule.addEventListener("click", async () => {
     renderAssignments(res.solution?.assignments || []);
   } catch (e) {
     console.error(e);
-    alert(`배정 실패: ${e.message}`);   // ✅ 에러 이유 그대로 표시
+    alert(`배정 실패: ${e.message}`); // 에러 원인 그대로 표시
   }
 });
 
