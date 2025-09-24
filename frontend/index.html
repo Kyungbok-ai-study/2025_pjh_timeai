@@ -5,72 +5,98 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>시간표 배정 데모</title>
   <style>
-    body { font-family: system-ui, apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; }
-    h1 { margin: 0 0 12px; }
-    .row { display: flex; gap: 16px; flex-wrap: wrap; }
-    .card { border: 1px solid #ddd; border-radius: 12px; padding: 16px; flex: 1; min-width: 320px; }
-    label { display: block; margin: 6px 0 4px; font-weight: 600; }
+    :root { --border:#e5e7eb; --muted:#6b7280; }
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 24px; line-height: 1.45; }
+    h1 { margin: 0 0 16px; }
+    .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+    .card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; flex: 1; min-width: 340px; background: #fff; }
+    label { display: block; margin: 8px 0 6px; font-weight: 600; }
     input[type="text"], input[type="number"], textarea, select {
-      width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 8px;
+      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; outline: none;
     }
+    input[type="checkbox"] { transform: translateY(1px); margin-right: 6px; }
     button { padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer; }
-    button.primary { background:#222; color:#fff; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px;}
-    th, td { border: 1px solid #eee; padding: 8px; text-align: left; }
-    .muted { color: #666; font-size: 12px; }
-    .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#f2f2f2; margin-right:6px; }
+    button.primary { background:#111827; color:#fff; }
+    button.ghost { background:#f3f4f6; }
+    .muted { color: var(--muted); font-size: 12px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; font-size: 14px; }
+    th, td { border: 1px solid var(--border); padding: 8px; text-align: left; }
+    th { background: #f9fafb; }
+    details { margin: 6px 0 8px; }
+    .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#f3f4f6; }
+    .toolbar { display:flex; gap:8px; margin-top:8px; }
+    @media (prefers-color-scheme: dark) {
+      body { background:#0b0c0f; color:#e5e7eb; }
+      .card { background:#0f1115; border-color:#1f2937; }
+      input, textarea, select { background:#0b0c0f; color:#e5e7eb; border-color:#1f2937; }
+      table, th, td { border-color:#1f2937; }
+      th { background:#111317; }
+      button.ghost { background:#111317; color:#e5e7eb; }
+    }
   </style>
 </head>
 <body>
   <h1>시간표 배정 데모</h1>
+
   <div class="row">
+    <!-- 좌측: 과목 검색/목록 -->
     <div class="card">
       <h3>과목 검색</h3>
-      <label>키워드</label>
+      <label for="q">키워드</label>
       <input id="q" type="text" placeholder="예: 인공지능, 데이터, Python ..." />
-      <div style="margin-top:8px;">
+      <div class="toolbar">
         <button id="btnSearch" class="primary">검색</button>
-        <button id="btnAll">전체 불러오기</button>
+        <button id="btnAll" class="ghost">전체 불러오기</button>
       </div>
       <div id="coursesInfo" class="muted" style="margin-top:8px;"></div>
       <div id="coursesWrap"></div>
     </div>
 
+    <!-- 우측: 배정 실행 -->
     <div class="card">
       <h3>/schedule 배정 실행</h3>
+
       <details open>
-        <summary>그리드 / 제약</summary>
-        <label>요일 (쉼표 구분)</label>
+        <summary><b>그리드 / 제약</b></summary>
+
+        <label for="days">요일 (쉼표 구분)</label>
         <input id="days" type="text" value="MON,TUE,WED,THU,FRI" />
-        <div class="row">
+
+        <div class="row" style="gap:12px;">
           <div style="flex:1">
-            <label>일일 교시 수</label>
+            <label for="blocks">일일 교시 수</label>
             <input id="blocks" type="number" value="8" min="1" />
           </div>
           <div style="flex:1">
-            <label>블록 분(min)</label>
+            <label for="minutes">블록 분(min)</label>
             <input id="minutes" type="number" value="50" min="10" />
           </div>
         </div>
+
         <label><input id="noFri" type="checkbox" /> 금요일 저녁 금지</label>
         <label><input id="prefMorning" type="checkbox" /> 오전 선호</label>
         <label><input id="prefCompact" type="checkbox" /> 같은 요일 압축 선호</label>
-        <label>선호 가중치</label>
+
+        <label for="weight">선호 가중치</label>
         <input id="weight" type="number" value="2" min="1" />
       </details>
 
       <details>
-        <summary>자연어 요구사항(제미나이)</summary>
-        <textarea id="reqKo" rows="4" placeholder="예) 금요일 저녁 피하고 오전 위주, 같은 과목은 하루에 몰아줘."></textarea>
-        <div class="muted">작성하면 위의 개별 옵션 대신 한국어 요구사항을 파싱해서 적용합니다.</div>
+        <summary><b>자연어 요구사항 (제미나이)</b></summary>
+        <textarea id="reqKo" rows="4" placeholder="예) 금요일 저녁 피하고 오전 위주, 같은 과목은 한 요일에 몰아서."></textarea>
+        <div class="muted">이 칸에 입력하면 위 옵션 대신 자연어 제약 파싱 모드로 동작합니다.</div>
       </details>
 
-      <div style="margin-top:10px;">
+      <div class="toolbar">
         <button id="btnSchedule" class="primary">배정 실행</button>
       </div>
 
       <div id="summary" style="margin-top:10px;"></div>
       <div id="assignmentsWrap"></div>
+
+      <!-- 필요하면 주석 해제하여 원본 응답 확인 -->
+      <!-- <pre id="debug" style="margin-top:12px; white-space:pre-wrap;"></pre> -->
     </div>
   </div>
 
