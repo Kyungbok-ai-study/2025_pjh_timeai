@@ -78,3 +78,5 @@ def gemini_recommend(body: RecommendIn):
 # --- 정적파일 서빙: 루트("/")가 아닌 "/app" 으로! ---
 FRONT_DIR = Path(__file__).resolve().parent.parent / "frontend"
 app.mount("/app", StaticFiles(directory=str(FRONT_DIR), html=True), name="static")
+
+
