@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>Courses</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui; margin:24px}
+    input,button{font-size:16px; padding:6px}
+    table{border-collapse:collapse; width:100%; margin-top:12px}
+    th,td{border:1px solid #ddd; padding:6px; text-align:left}
+    th{background:#f5f5f5}
+  </style>
+</head>
+<body>
+  <h1>강의 목록</h1>
+  <div>
+    <input id="q" placeholder="교과목명 검색" />
+    <button onclick="loadAll()">전체</button>
+    <button onclick="doSearch()">검색</button>
+    <span id="meta"></span>
+  </div>
+  <table id="tbl"><thead></thead><tbody></tbody></table>
+  <script src="./app.js"></script>
+</body>
+</html>
