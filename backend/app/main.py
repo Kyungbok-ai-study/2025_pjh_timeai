@@ -9,7 +9,7 @@ from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 from pathlib import Path
 from pydantic import BaseModel                         # 🔴 추가
-from gemini_client import summarize_text_ko, rank_courses_ko   # 🔴 추가
+from core.gemini_client import summarize_text_ko, rank_courses_ko   # 🔴 추가
 
 load_dotenv()
 DATABASE_URL = os.getenv("DATABASE_URL", "")
@@ -17,7 +17,7 @@ engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 
 app = FastAPI(title="Courses API")
 
-FRONT_DIR = Path(__file__).resolve().parent.parent / "frontend"
+FRONT_DIR = Path(__file__).resolve().parent.parent.parent / "frontend"
 app.mount("/app", StaticFiles(directory=str(FRONT_DIR), html=True), name="static")
 class SummaryIn(BaseModel):        # 🔴 추가
     text: str
@@ -76,7 +76,7 @@ def gemini_recommend(body: RecommendIn):
     return {"result": res}
 
 # --- 정적파일 서빙: 루트("/")가 아닌 "/app" 으로! ---
-FRONT_DIR = Path(__file__).resolve().parent.parent / "frontend"
+FRONT_DIR = Path(__file__).resolve().parent.parent.parent / "frontend"
 app.mount("/app", StaticFiles(directory=str(FRONT_DIR), html=True), name="static")
 
 
