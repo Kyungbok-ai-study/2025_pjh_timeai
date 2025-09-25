@@ -1,3 +1,7 @@
+# FastAPI 서버 실행
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 # main.py (정상 동작 버전: /health, /courses, /search + /app 정적서빙)
 import os
 import pandas as pd
