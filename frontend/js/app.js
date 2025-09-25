@@ -98,13 +98,11 @@ btnAll.addEventListener("click", async ()=>{
   try{ const data=await apiGet("/courses?limit=100&offset=0"); renderCourses(data); }
   catch(e){ console.error(e); alert(`불러오기 실패: ${e.message}`); }
 });
-
 btnSearch.addEventListener("click", async ()=>{
   const kw=(q.value||"").trim(); if(!kw) return alert("키워드를 입력하세요.");
   try{ const data=await apiGet(`/search?q=${encodeURIComponent(kw)}&limit=100&offset=0`); renderCourses(data.results, data.total); }
   catch(e){ console.error(e); alert(`검색 실패: ${e.message}`); }
 });
-
 btnSchedule.addEventListener("click", async ()=>{
   try{
     const payload={};
@@ -118,7 +116,7 @@ btnSchedule.addEventListener("click", async ()=>{
       payload.soft_prefer_morning = !!prefMorning.checked;
       payload.soft_weight = Number(weight.value||1);
     }
-    payload.randomize = true; // ✨ 항상 랜덤
+    payload.randomize = true; // 항상 랜덤
 
     const res = await apiPost("/schedule", payload);
     const s = res.summary || {};
@@ -129,7 +127,6 @@ btnSchedule.addEventListener("click", async ()=>{
     alert(`배정 실패: ${e.message}`);
   }
 });
-
 btnReset?.addEventListener("click", ()=> location.reload());
 
 // 초기 로드

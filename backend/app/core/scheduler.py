@@ -45,7 +45,7 @@ class Hard:
 
 @dataclass
 class Soft:
-    # ✨ compact 선호는 삭제. 오전 선호만 유지(원하면 체크박스로 on/off)
+    # “같은 요일 압축 선호”는 완전 제거. 오전 선호만.
     prefer_morning: bool = False
     weight: int = 1
 
@@ -54,14 +54,14 @@ class Request:
     grid: Grid
     hard: Hard
     soft: Soft
-    randomize: bool = True  # ✨ 매 실행 랜덤 탐색
+    randomize: bool = True  # 매 실행 랜덤 탐색
 
 # ---------- 솔버 ----------
 def solve(courses: List[Course], rooms: List[Room], instructors: List[Instructor], req: Request):
     model = cp_model.CpModel()
     grid = req.grid
 
-    # 슬롯/방 순서를 섞어서 매 실행 하해가 달라지도록
+    # 슬롯/방 순서를 섞어서 매 실행 해가 달라지도록
     days = list(grid.days)
     blocks = list(range(1, grid.blocks_per_day + 1))
     slots = [(d, b) for d in days for b in blocks]

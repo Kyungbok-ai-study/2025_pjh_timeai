@@ -12,9 +12,7 @@
     .row { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
     .card { border: 1px solid var(--border); border-radius: 12px; padding: 16px; flex: 1; min-width: 340px; background: #fff; }
     label { display: block; margin: 8px 0 6px; font-weight: 600; }
-    input[type="text"], input[type="number"], textarea, select {
-      width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; outline: none;
-    }
+    input[type="text"], input[type="number"], textarea, select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; outline: none; }
     input[type="checkbox"] { transform: translateY(1px); margin-right: 6px; }
     button { padding: 10px 14px; border: 0; border-radius: 10px; cursor: pointer; }
     button.primary { background:#111827; color:#fff; }
@@ -26,14 +24,6 @@
     details { margin: 6px 0 8px; }
     .pill { display:inline-block; padding:2px 8px; border-radius:999px; background:#f3f4f6; }
     .toolbar { display:flex; gap:8px; margin-top:8px; }
-    @media (prefers-color-scheme: dark) {
-      body { background:#0b0c0f; color:#e5e7eb; }
-      .card { background:#0f1115; border-color:#1f2937; }
-      input, textarea, select { background:#0b0c0f; color:#e5e7eb; border-color:#1f2937; }
-      table, th, td { border-color:#1f2937; }
-      th { background:#111317; }
-      button.ghost { background:#111317; color:#e5e7eb; }
-    }
   </style>
 </head>
 <body>
@@ -76,32 +66,27 @@
 
         <label><input id="noFri" type="checkbox" /> 금요일 저녁 금지</label>
         <label><input id="prefMorning" type="checkbox" /> 오전 선호</label>
-        <label><input id="prefCompact" type="checkbox" /> 같은 요일 압축 선호</label>
-
+        <!-- 같은 요일 압축 선호는 의도적으로 제거/비활성 -->
         <label for="weight">선호 가중치</label>
         <input id="weight" type="number" value="2" min="1" />
       </details>
 
       <details>
         <summary><b>자연어 요구사항 (제미나이)</b></summary>
-        <textarea id="reqKo" rows="4" placeholder="예) 금요일 저녁 피하고 오전 위주, 같은 과목은 한 요일에 몰아서."></textarea>
+        <textarea id="reqKo" rows="4" placeholder="예) 금요일 저녁 피하고 오전 위주."></textarea>
         <div class="muted">이 칸에 입력하면 위 옵션 대신 자연어 제약 파싱 모드로 동작합니다.</div>
       </details>
 
       <div class="toolbar">
         <button id="btnSchedule" class="primary">배정 실행</button>
-        <button id="btnReset" class="ghost">리셋</button> <!-- ✅ 추가 -->
+        <button id="btnReset" class="ghost">리셋</button>
       </div>
 
       <div id="summary" style="margin-top:10px;"></div>
       <div id="assignmentsWrap"></div>
-
-      <!-- 필요하면 주석 해제하여 원본 응답 확인 -->
-      <!-- <pre id="debug" style="margin-top:12px; white-space:pre-wrap;"></pre> -->
     </div>
   </div>
 
-  <!-- 네가 사용하는 경로 유지 -->
-  <script src="js/app.js"></script>
+  <script src="/app/js/app.js"></script>
 </body>
 </html>
